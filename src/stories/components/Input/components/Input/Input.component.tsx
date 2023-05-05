@@ -2,14 +2,10 @@ import { oneOf, string } from "prop-types";
 import { InputComponentStyled } from "./Input.styled";
 
 function InputComponent({ ...props }) {
-  console.log(props);
-
   return (
     <InputComponentStyled
-      {...props.props}
-      onChange={() => {
-        props.props.onChange();
-      }}
+      {...props.input}
+      onChange={(event) => props.updateField(event.target.value)}
     />
   );
 }

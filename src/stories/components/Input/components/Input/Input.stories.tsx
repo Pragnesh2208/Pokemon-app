@@ -24,7 +24,7 @@ const meta: Meta<typeof InputComponentStyled> = {
     helperText: String,
     type: {
       control: "select",
-      options: ["text", "number", "password"],
+      options: ["text", "number", "password", "email"],
     },
     value: String,
   },
