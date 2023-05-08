@@ -1,7 +1,7 @@
 import { oneOf, string } from "prop-types";
 import { InputComponentStyled } from "./Input.styled";
 
-function InputComponent({ ...props }) {
+function CustomInputComponent({ ...props }) {
   return (
     <InputComponentStyled
       {...props.input}
@@ -9,9 +9,9 @@ function InputComponent({ ...props }) {
     />
   );
 }
-export default InputComponent;
+export default CustomInputComponent;
 
-InputComponent.prototype = {
+CustomInputComponent.prototype = {
   id: string,
   label: string,
   variant: oneOf(["outlined", "filled", "standard"]),

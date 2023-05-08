@@ -2,7 +2,7 @@ import { useReducer } from "react";
 import { Field, Form } from "react-final-form";
 import { verifyUserDetails } from "../../APIs/Storage.api";
 import { UserInfo } from "../../models/UserInfo.model";
-import InputComponent from "../../stories/components/Input/components/Input/Input.component";
+import CustomInputComponent from "../../stories/components/CustomInput/Input.component";
 
 type Actions = {
   type: string;
@@ -91,7 +91,7 @@ function RegisterComponent() {
           <div>
             <Field
               name={"email"}
-              component={InputComponent}
+              component={CustomInputComponent}
               input={emailProps}
               updateField={(newValue: string) => {
                 dispatch({ type: "updateEmailValue", newValue: newValue });
@@ -102,7 +102,7 @@ function RegisterComponent() {
           <div>
             <Field
               name={"password"}
-              component={InputComponent}
+              component={CustomInputComponent}
               input={userPasswordProps}
               updateField={(newValue: string) => {
                 dispatch({ type: "updatePasswordValue", newValue: newValue });
@@ -113,7 +113,7 @@ function RegisterComponent() {
           <div>
             <Field
               name={"confirmPassword"}
-              component={InputComponent}
+              component={CustomInputComponent}
               input={userConfirmPasswordProps}
               updateField={(newValue: string) => {
                 dispatch({
