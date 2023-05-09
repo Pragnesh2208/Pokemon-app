@@ -92,7 +92,7 @@ function RegisterComponent() {
             <Field
               name={"email"}
               component={CustomInputComponent}
-              input={emailProps}
+              inputComponentProps={emailProps}
               updateField={(newValue: string) => {
                 dispatch({ type: "updateEmailValue", newValue: newValue });
               }}
@@ -103,7 +103,7 @@ function RegisterComponent() {
             <Field
               name={"password"}
               component={CustomInputComponent}
-              input={userPasswordProps}
+              inputComponentProps={userPasswordProps}
               updateField={(newValue: string) => {
                 dispatch({ type: "updatePasswordValue", newValue: newValue });
               }}
@@ -114,7 +114,7 @@ function RegisterComponent() {
             <Field
               name={"confirmPassword"}
               component={CustomInputComponent}
-              input={userConfirmPasswordProps}
+              inputComponentProps={userConfirmPasswordProps}
               updateField={(newValue: string) => {
                 dispatch({
                   type: "updateConfirmPasswordValue",

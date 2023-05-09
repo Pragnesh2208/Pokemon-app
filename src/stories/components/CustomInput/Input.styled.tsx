@@ -21,3 +21,5 @@ export const InputComponentStyled = styled(TextField)`
     }
   }
 `;
+
+export const CustomInputComponentStyled = styled("input")``;

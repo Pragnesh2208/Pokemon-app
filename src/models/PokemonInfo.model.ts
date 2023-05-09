@@ -5,4 +5,6 @@ export interface pokemonInfo {
   weight: number;
   abilites: string[];
   id: number;
+  order: number;
+  baseExperience: number;
 }

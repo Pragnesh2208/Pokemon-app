@@ -26,6 +26,8 @@ export async function getPokemons(
           .then((response) => {
             pokemonInfo.height = response.data.height;
             pokemonInfo.weight = response.data.weight;
+            pokemonInfo.baseExperience = response.data.base_experience;
+            pokemonInfo.order = response.data.order;
             const abilities = response.data.abilities;
             for (const ability of abilities) {
               pokemonInfo.abilites.push(ability.ability.name);

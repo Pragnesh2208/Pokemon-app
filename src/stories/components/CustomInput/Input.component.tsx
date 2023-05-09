@@ -4,9 +4,11 @@ import { InputComponentStyled } from "./Input.styled";
 function CustomInputComponent({ ...props }) {
   return (
     <InputComponentStyled
-      {...props.input}
+      {...props.inputComponentProps}
       onChange={(event) => props.updateField(event.target.value)}
-    />
+    >
+      {...props.children}
+    </InputComponentStyled>
   );
 }
 export default CustomInputComponent;
@@ -23,4 +25,5 @@ CustomInputComponent.prototype = {
   type: oneOf(["text", "number", "password"]),
   error: Boolean,
   helperText: string,
+  size: oneOf(["small", "medium"]),
 };

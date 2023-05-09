@@ -80,7 +80,7 @@ function LoginComponent() {
             <Field
               name={"email"}
               component={CustomInputComponent}
-              input={emailProps}
+              inputComponentProps={emailProps}
               updateField={(newValue: string) => {
                 dispatch({ type: "updateEmailValue", newValue: newValue });
               }}
@@ -91,7 +91,7 @@ function LoginComponent() {
             <Field
               name={"password"}
               component={CustomInputComponent}
-              input={userPasswordProps}
+              inputComponentProps={userPasswordProps}
               updateField={(newValue: string) => {
                 dispatch({ type: "updatePasswordValue", newValue: newValue });
               }}

@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import ListingComponent from "./components/ListingComponent/Listing.component";
-import PokemonDetailsComponent from "./components/ListingComponent/Pokemon-details/PokemonDetails.Component";
+import PokemonDetailsComponent from "./components/ListingComponent/Pokemon-details/PokemonDetails.component";
 import PokemonListingComponent from "./components/ListingComponent/Pokemon-listing/PokemonListing.component";
 import RegisterComponent from "./components/RegisterComponent/Register.component";
 import LoginComponent from "./components/index";
