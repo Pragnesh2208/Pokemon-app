@@ -5,13 +5,13 @@ import {
 } from "./CustomSearch.styled";
 
 function CustomSearchComponent({ ...props }) {
-  console.log(props);
   return (
     <>
       <CustomInputComponentStyled
         {...props.searchInputProps}
         onChange={(event) => {
-          props.updateField(event.target.value);
+          const value = event.target.value.trim();
+          props.updateField(value);
         }}
       >
         {props.children}

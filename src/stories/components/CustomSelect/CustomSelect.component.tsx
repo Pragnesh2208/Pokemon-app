@@ -1,13 +1,15 @@
+import { SelectChangeEvent } from "@mui/material";
 import React from "react";
 import { CustomMenuStyled, CustomSelectStyled } from "./CustomSelect.styled";
 
 function CustomSelectComponent({ ...props }) {
-  console.log(props);
-  const [age, setAge] = React.useState("10");
+  const [age, setAge] = React.useState(props.defaultValue);
 
-  const handleChange = (event: any) => {
-    setAge(event.target.value as string);
+  const handleChange = (event: SelectChangeEvent<unknown>) => {
+    setAge(event?.target?.value as string);
+    props.updateValue(event?.target?.value as number);
   };
+  const menu = props.menuInfo;
 
   return (
     <CustomSelectStyled
@@ -15,14 +17,14 @@ function CustomSelectComponent({ ...props }) {
       id="demo-simple-select"
       value={age}
       label="Age"
-      onChange={(event) => {
+      onChange={(event: SelectChangeEvent<unknown>) => {
         handleChange(event);
       }}
-      defaultValue="hh"
     >
-      <CustomMenuStyled value={10}>10</CustomMenuStyled>
-      <CustomMenuStyled value={20}>20</CustomMenuStyled>
-      <CustomMenuStyled value={30}>50</CustomMenuStyled>
+      {" "}
+      {menu.map((x) => {
+        return <CustomMenuStyled value={x.value}>{x.key}</CustomMenuStyled>;
+      })}
     </CustomSelectStyled>
   );
 }

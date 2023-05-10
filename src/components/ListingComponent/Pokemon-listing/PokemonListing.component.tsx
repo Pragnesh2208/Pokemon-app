@@ -1,29 +1,65 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { PokemonsInfoContext } from "../../../context/getPokemonInfo";
+import {
+  getPokemonLists,
+  getSearchPokemonLists,
+} from "../../../APIs/PokemonInfo.api";
 import { pokemonInfo } from "../../../models/PokemonInfo.model";
 import CardComponent from "../../../stories/components/Card/Card.component";
 import CustomSearchComponent from "../../../stories/components/CustomSearch/CustomSearch.component";
 import CustomSelectComponent from "../../../stories/components/CustomSelect/CustomSelect.component";
+interface MenuInfo {
+  key: string;
+  value: number;
+}
 
 function PokemonListingComponent() {
-  const pokemonInfoContext = useContext(PokemonsInfoContext);
-  const pokemonLists = pokemonInfoContext.data;
   const [SearchValue, updateSearchValue] = useState("");
+  const [paginationValue, updatePaginationValue] = useState(10);
+
+  const [pokemonLists, updatePokemonLists] = useState([]);
+  const [searchPokemonLists, updateSearchPokemonLists] = useState([]);
+
+  getPokemonLists(paginationValue).then((res) => {
+    updatePokemonLists(res as never[]);
+  });
+  if (SearchValue.trim().length > 0)
+    getSearchPokemonLists(SearchValue, pokemonLists).then((res) => {
+      console.log(res);
+      updateSearchPokemonLists(res);
+    });
+  // useEffect(() => {
+  //   getSearchPokemonLists(SearchValue, pokemonLists).then((res) => {
+  //     console.log(res);
+  //     updateSearchPokemonLists(res);
+  //   });
+  // }, [SearchValue.trim().length > 0]);
 
   const searchInputProps = {
     name: "Search",
     placeholder: "Search...",
     error: false,
-    helperText: "",
     variant: "outlined",
     type: "text",
     autoFocus: true,
     label: "Search",
     value: SearchValue,
     disableUnderline: true,
-    searchButtonPosition: "inside",
   };
+  const menuInfo: MenuInfo[] = [
+    {
+      key: "10",
+      value: 10,
+    },
+    {
+      key: "20",
+      value: 20,
+    },
+    {
+      key: "30",
+      value: 30,
+    },
+  ];
 
   return (
     <>
@@ -34,18 +70,34 @@ function PokemonListingComponent() {
             updateSearchValue(newValue);
           }}
         />
-        <CustomSelectComponent></CustomSelectComponent>
+        <CustomSelectComponent
+          updateValue={(newValue: number) => {
+            updatePaginationValue(newValue);
+          }}
+          defaultValue={paginationValue}
+          menuInfo={menuInfo}
+        ></CustomSelectComponent>
       </div>
       <div className="pokemon-list__cards">
-        {pokemonLists.map((x: pokemonInfo) => {
-          return (
-            <div className="pokemon-list__card">
-              <Link to={`${x.id}`} key={x.id} state={{ id: x.id }}>
-                <CardComponent pokemonInfo={x} key={x.id}></CardComponent>
-              </Link>
-            </div>
-          );
-        })}
+        {!searchPokemonLists || searchPokemonLists?.length == 0
+          ? pokemonLists.map((x: pokemonInfo) => {
+              return (
+                <div className="pokemon-list__card">
+                  <Link to={`${x.id}`} key={x.id} state={{ id: x.id }}>
+                    <CardComponent pokemonInfo={x} key={x.id}></CardComponent>
+                  </Link>
+                </div>
+              );
+            })
+          : searchPokemonLists.map((x: pokemonInfo) => {
+              return (
+                <div className="pokemon-list__card">
+                  <Link to={`${x.id}`} key={x.id} state={{ id: x.id }}>
+                    <CardComponent pokemonInfo={x} key={x.id}></CardComponent>
+                  </Link>
+                </div>
+              );
+            })}
       </div>
     </>
   );

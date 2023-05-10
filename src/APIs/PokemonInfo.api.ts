@@ -1,9 +1,7 @@
 import axios from "axios";
 import { pokemonInfo } from "../models/PokemonInfo.model";
 
-export async function getPokemons(
-  limit: number
-): Promise<pokemonInfo[] | void> {
+async function getPokemons(limit: number): Promise<pokemonInfo[] | void> {
   const pokemonsInfo: pokemonInfo[] = [];
 
   const res = await axios
@@ -40,4 +38,55 @@ export async function getPokemons(
     })
     .catch((err) => console.log(err));
   return res;
+}
+
+export async function getPokemonLists(paginationInfo: number) {
+  try {
+    return await getPokemons(paginationInfo).then((res) => {
+      return res;
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function getSearchPokemonLists(
+  searchPokemon: string,
+  pokemonLists: pokemonInfo[]
+) {
+  try {
+    const newPokemonLists: pokemonInfo[] = [];
+
+    for await (const pokemonInfo of pokemonLists) {
+      const name = pokemonInfo.name;
+      if (longestCommonSubsequence(searchPokemon, name)) {
+        newPokemonLists.push(pokemonInfo);
+      }
+    }
+    return newPokemonLists;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+function longestCommonSubsequence(s1: string, s2: string) {
+  const n = s1.length;
+  const m = s2.length;
+  const storeState: Array<Array<number>> = [];
+
+  for (let i = 0; i <= n; i++) {
+    storeState[i] = [] as Array<number>;
+    for (let j = 0; j <= m; j++) {
+      storeState[i][j] = 0;
+    }
+  }
+  for (let i = 1; i <= n; i++) {
+    for (let j = 1; j <= m; j++) {
+      if (s1[i - 1] == s2[j - 1])
+        storeState[i][j] = 1 + storeState[i - 1][j - 1];
+      else
+        storeState[i][j] = Math.max(storeState[i - 1][j], storeState[i][j - 1]);
+    }
+  }
+  return storeState[n][m];
 }

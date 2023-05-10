@@ -6,9 +6,7 @@ function CustomInputComponent({ ...props }) {
     <InputComponentStyled
       {...props.inputComponentProps}
       onChange={(event) => props.updateField(event.target.value)}
-    >
-      {...props.children}
-    </InputComponentStyled>
+    ></InputComponentStyled>
   );
 }
 export default CustomInputComponent;
