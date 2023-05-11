@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   getPokemonLists,
@@ -19,21 +19,11 @@ function PokemonListingComponent() {
 
   const [pokemonLists, updatePokemonLists] = useState([]);
   const [searchPokemonLists, updateSearchPokemonLists] = useState([]);
-
-  getPokemonLists(paginationValue).then((res) => {
-    updatePokemonLists(res as never[]);
-  });
-  if (SearchValue.trim().length > 0)
-    getSearchPokemonLists(SearchValue, pokemonLists).then((res) => {
-      console.log(res);
-      updateSearchPokemonLists(res);
+  useEffect(() => {
+    getPokemonLists(paginationValue).then((res) => {
+      updatePokemonLists(res as never[]);
     });
-  // useEffect(() => {
-  //   getSearchPokemonLists(SearchValue, pokemonLists).then((res) => {
-  //     console.log(res);
-  //     updateSearchPokemonLists(res);
-  //   });
-  // }, [SearchValue.trim().length > 0]);
+  }, []);
 
   const searchInputProps = {
     name: "Search",
@@ -56,8 +46,8 @@ function PokemonListingComponent() {
       value: 20,
     },
     {
-      key: "30",
-      value: 30,
+      key: "50",
+      value: 50,
     },
   ];
 
@@ -67,19 +57,33 @@ function PokemonListingComponent() {
         <CustomSearchComponent
           searchInputProps={searchInputProps}
           updateField={(newValue: string) => {
+            newValue = newValue.trim();
             updateSearchValue(newValue);
+
+            if (newValue.length > 0) {
+              getSearchPokemonLists(newValue).then((res) => {
+                updateSearchPokemonLists(res);
+              });
+            } else {
+              updateSearchPokemonLists([]);
+            }
           }}
         />
         <CustomSelectComponent
           updateValue={(newValue: number) => {
-            updatePaginationValue(newValue);
+            getPokemonLists(newValue).then((res) => {
+              updatePokemonLists(res as never[]);
+              getSearchPokemonLists(SearchValue).then((res) => {
+                updateSearchPokemonLists(res);
+              });
+            });
           }}
           defaultValue={paginationValue}
           menuInfo={menuInfo}
         ></CustomSelectComponent>
       </div>
       <div className="pokemon-list__cards">
-        {!searchPokemonLists || searchPokemonLists?.length == 0
+        {searchPokemonLists?.length == 0
           ? pokemonLists.map((x: pokemonInfo) => {
               return (
                 <div className="pokemon-list__card">

@@ -22,9 +22,9 @@ export const verifyUserDetails = (userInfo: UserInfo): boolean => {
 };
 
 export const getToken = (): boolean => {
-  return localStorage.getItem("pokemonLogin") ? true : false;
+  return localStorage.getItem("pokemonToken") === "true" ? true : false;
 };
 
 export const removeToken = () => {
-  localStorage.removeItem("pokemonLogin");
+  localStorage.removeItem("pokemonToken");
 };

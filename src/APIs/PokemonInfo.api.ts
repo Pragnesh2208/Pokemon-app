@@ -1,5 +1,6 @@
 import axios from "axios";
 import { pokemonInfo } from "../models/PokemonInfo.model";
+let GlobalPokemonList: pokemonInfo[];
 
 async function getPokemons(limit: number): Promise<pokemonInfo[] | void> {
   const pokemonsInfo: pokemonInfo[] = [];
@@ -34,6 +35,7 @@ async function getPokemons(limit: number): Promise<pokemonInfo[] | void> {
           });
         pokemonsInfo.push(temp);
       }
+      GlobalPokemonList = pokemonsInfo;
       return pokemonsInfo;
     })
     .catch((err) => console.log(err));
@@ -50,10 +52,8 @@ export async function getPokemonLists(paginationInfo: number) {
   }
 }
 
-export async function getSearchPokemonLists(
-  searchPokemon: string,
-  pokemonLists: pokemonInfo[]
-) {
+export async function getSearchPokemonLists(searchPokemon: string) {
+  const pokemonLists = GlobalPokemonList;
   try {
     const newPokemonLists: pokemonInfo[] = [];
 
@@ -69,7 +69,22 @@ export async function getSearchPokemonLists(
   }
 }
 
-function longestCommonSubsequence(s1: string, s2: string) {
+export async function getPokemonById(pokemonId: number) {
+  const pokemonLists = GlobalPokemonList;
+  try {
+    for await (const pokemonInfo of pokemonLists) {
+      if (pokemonId === -1) return new Error();
+      const id = pokemonInfo.id;
+      if (id === pokemonId) {
+        return pokemonInfo;
+      }
+    }
+  } finally {
+  }
+  return 0;
+}
+
+export function longestCommonSubsequence(s1: string, s2: string) {
   const n = s1.length;
   const m = s2.length;
   const storeState: Array<Array<number>> = [];

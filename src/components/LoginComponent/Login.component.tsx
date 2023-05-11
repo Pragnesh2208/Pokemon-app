@@ -1,6 +1,7 @@
-import { useReducer } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { Field, Form } from "react-final-form";
 import { verifyUserDetails } from "../../APIs/Storage.api";
+import { userInfoContext } from "../../Context/UserInfoContext";
 import { UserInfo } from "../../models/UserInfo.model";
 import CustomInputComponent from "../../stories/components/CustomInput/Input.component";
 
@@ -10,7 +11,6 @@ type Actions = {
 };
 
 function reducer(state: any, action: Actions) {
-  console.log(window.history.state);
   switch (action.type) {
     case "updateEmailValue": {
       return {
@@ -28,12 +28,22 @@ function reducer(state: any, action: Actions) {
   }
 }
 
-function LoginComponent() {
+function LoginComponent({ updateLogin }) {
   const [state, dispatch] = useReducer(reducer, {
     email: "",
     emailIsNotvalid: false,
     password: "",
   });
+  const userInfo = useContext(userInfoContext);
+
+  const [isUserValid, setIsUserValid] = useState(false);
+
+  useEffect(() => {
+    if (isUserValid) {
+      userInfo?.disPatch(isUserValid);
+      updateLogin(isUserValid);
+    }
+  }, [isUserValid]);
 
   const emailProps = {
     name: "Email",
@@ -64,11 +74,7 @@ function LoginComponent() {
       email: state.email,
       password: state.password,
     };
-    const isUserValid = verifyUserDetails(userInfo);
-    if (isUserValid) {
-      // navigate("/pokemon-listing");
-      console.log("Validated");
-    }
+    setIsUserValid(verifyUserDetails(userInfo));
   };
 
   return (

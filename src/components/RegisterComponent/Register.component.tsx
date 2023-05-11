@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 import { Field, Form } from "react-final-form";
-import { verifyUserDetails } from "../../APIs/Storage.api";
+import { useNavigate } from "react-router-dom";
+import { storeUserDetails, verifyUserDetails } from "../../APIs/Storage.api";
 import { UserInfo } from "../../models/UserInfo.model";
 import CustomInputComponent from "../../stories/components/CustomInput/Input.component";
 
@@ -41,6 +42,8 @@ function RegisterComponent() {
     confirmPassword: "",
   });
 
+  const naviagate = useNavigate();
+
   const emailProps = {
     name: "Email",
     placeholder: "Enter Email",
@@ -77,10 +80,11 @@ function RegisterComponent() {
       password: state.password,
     };
     const isUserValid = verifyUserDetails(userInfo);
-    if (isUserValid) {
+    if (!isUserValid) {
       // navigate("/pokemon-listing");
-      console.log("Validated");
+      storeUserDetails(userInfo);
     }
+    naviagate("/login");
   };
 
   return (
