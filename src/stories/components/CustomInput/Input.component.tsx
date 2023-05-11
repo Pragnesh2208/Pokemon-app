@@ -2,12 +2,7 @@ import { oneOf, string } from "prop-types";
 import { InputComponentStyled } from "./Input.styled";
 
 function CustomInputComponent({ ...props }) {
-  return (
-    <InputComponentStyled
-      {...props.inputComponentProps}
-      onChange={(event) => props.updateField(event.target.value)}
-    ></InputComponentStyled>
-  );
+  return <InputComponentStyled {...props}></InputComponentStyled>;
 }
 export default CustomInputComponent;
 

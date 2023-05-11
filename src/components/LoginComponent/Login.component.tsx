@@ -69,46 +69,104 @@ function LoginComponent({ updateLogin }) {
     value: state.password,
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (values: UserInfo, form) => {
     const userInfo: UserInfo = {
       email: state.email,
       password: state.password,
     };
+    console.log(values);
     setIsUserValid(verifyUserDetails(userInfo));
   };
 
   return (
     <Form
       onSubmit={onSubmit}
-      render={({ handleSubmit }) => (
-        <form className="form" onSubmit={handleSubmit}>
-          <div>
-            <Field
-              name={"email"}
-              component={CustomInputComponent}
-              inputComponentProps={emailProps}
-              updateField={(newValue: string) => {
-                dispatch({ type: "updateEmailValue", newValue: newValue });
-              }}
-            ></Field>
-          </div>
+      validate={(values) => {
+        const errors = {};
 
-          <div>
-            <Field
-              name={"password"}
-              component={CustomInputComponent}
-              inputComponentProps={userPasswordProps}
-              updateField={(newValue: string) => {
-                dispatch({ type: "updatePasswordValue", newValue: newValue });
-              }}
-            ></Field>
-          </div>
+        return errors;
+      }}
+      render={({ handleSubmit }) => {
+        return (
+          <form
+            className="form"
+            onSubmit={(event) => {
+              handleSubmit(event);
+            }}
+          >
+            <div>
+              <Field
+                name="email"
+                validate={(values) => {
+                  console.log(values);
+                  let errors = " ";
+                  const emailRegex =
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                  if (values?.trim()?.length === 0) errors = "required";
+                  else if (!emailRegex.test(values)) {
+                    errors = "invalidEmail";
+                  }
+                  return errors;
+                }}
+              >
+                {({ input, meta }) => {
+                  console.log("meta : ", meta);
 
-          <div>
-            <button type="submit">Submit</button>
-          </div>
-        </form>
-      )}
+                  return (
+                    <CustomInputComponent
+                      id="email"
+                      label="email"
+                      placeholder="Email"
+                      type="email"
+                      variant="standard"
+                      {...input}
+                      error={() => {
+                        if (meta.pristine && meta.touched) return true;
+                        else if (meta.touched && meta.error) return true;
+                        else return false;
+                      }}
+                      helperText={() => {
+                        if (meta.pristine && meta.touched)
+                          return "Email is required";
+                        else if (meta.touched && meta.error)
+                          return "Please enter valid email";
+                        else return " ";
+                      }}
+                    />
+                  );
+                }}
+              </Field>
+            </div>
+
+            <div>
+              <Field name="password">
+                {({ input, meta }) => {
+                  return (
+                    <CustomInputComponent
+                      id="password"
+                      label="password"
+                      placeholder="Enter Password"
+                      variant="standard"
+                      {...input}
+                      type="email"
+                      error={meta.touched && meta.error}
+                      helperText={
+                        meta.touched && meta.error
+                          ? meta.error === "minimumLength"
+                          : ""
+                      }
+                    />
+                  );
+                }}
+              </Field>
+            </div>
+
+            <div>
+              <button type="submit">Submit</button>
+            </div>
+          </form>
+        );
+      }}
     />
   );
 }
