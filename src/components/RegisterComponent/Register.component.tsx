@@ -4,6 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { storeUserDetails, verifyUserDetails } from "../../APIs/Storage.api";
 import { UserInfo } from "../../models/UserInfo.model";
 import CustomInputComponent from "../../stories/components/CustomInput/Input.component";
+import {
+  compositeValidator,
+  minLength,
+  required,
+  validEmail,
+} from "../../util/validations";
 
 type Actions = {
   type: string;
@@ -90,46 +96,82 @@ function RegisterComponent() {
   return (
     <Form
       onSubmit={onSubmit}
-      render={({ handleSubmit }) => (
+      validate={(values) => {
+        const error = {};
+        console.log(values);
+        if (values.password !== values.confirmPassword) {
+          error.confirmPassword = "Confirm password and password are different";
+        }
+        return error;
+      }}
+      render={({ handleSubmit, error }) => (
         <form className="form" onSubmit={handleSubmit}>
           <div>
             <Field
-              name={"email"}
-              component={CustomInputComponent}
-              inputComponentProps={emailProps}
-              updateField={(newValue: string) => {
-                dispatch({ type: "updateEmailValue", newValue: newValue });
+              name="email"
+              validate={compositeValidator(required, validEmail)}
+            >
+              {({ input, meta }) => {
+                return (
+                  <CustomInputComponent
+                    id="email"
+                    label="email"
+                    placeholder="Enter Email"
+                    type="email"
+                    variant="standard"
+                    {...input}
+                    error={meta.touched && meta.error ? true : false}
+                    helperText={(meta.touched && meta.error) || " "}
+                  ></CustomInputComponent>
+                );
               }}
-            ></Field>
+            </Field>
           </div>
 
           <div>
             <Field
-              name={"password"}
-              component={CustomInputComponent}
-              inputComponentProps={userPasswordProps}
-              updateField={(newValue: string) => {
-                dispatch({ type: "updatePasswordValue", newValue: newValue });
+              name="password"
+              validate={compositeValidator(required, minLength(4))}
+            >
+              {({ input, meta }) => {
+                console.log(meta);
+                return (
+                  <CustomInputComponent
+                    id="password"
+                    label="Password"
+                    placeholder="Enter Password"
+                    variant="standard"
+                    {...input}
+                    type="password"
+                    error={meta.touched && meta.error ? true : false}
+                    helperText={(meta.touched && meta.error) || error || " "}
+                  />
+                );
               }}
-            ></Field>
+            </Field>
           </div>
 
           <div>
-            <Field
-              name={"confirmPassword"}
-              component={CustomInputComponent}
-              inputComponentProps={userConfirmPasswordProps}
-              updateField={(newValue: string) => {
-                dispatch({
-                  type: "updateConfirmPasswordValue",
-                  newValue: newValue,
-                });
+            <Field name="confirmPassword">
+              {({ input, meta }) => {
+                return (
+                  <CustomInputComponent
+                    id="confirmPassword"
+                    label="Confirm Password"
+                    placeholder="Enter confirm password"
+                    variant="standard"
+                    {...input}
+                    type="password"
+                    error={meta.touched && meta.error ? true : false}
+                    helperText={meta.touched ? meta.error : " "}
+                  ></CustomInputComponent>
+                );
               }}
-            ></Field>
+            </Field>
           </div>
 
           <div>
-            <button type="submit">Submit</button>
+            <button type="submit">Register</button>
           </div>
         </form>
       )}

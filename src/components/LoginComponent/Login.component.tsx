@@ -1,9 +1,16 @@
+import { FORM_ERROR } from "final-form";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { Field, Form } from "react-final-form";
 import { verifyUserDetails } from "../../APIs/Storage.api";
 import { userInfoContext } from "../../Context/UserInfoContext";
 import { UserInfo } from "../../models/UserInfo.model";
 import CustomInputComponent from "../../stories/components/CustomInput/Input.component";
+import {
+  compositeValidator,
+  minLength,
+  required,
+  validEmail,
+} from "../../util/validations";
 
 type Actions = {
   type: string;
@@ -69,24 +76,18 @@ function LoginComponent({ updateLogin }) {
     value: state.password,
   };
 
-  const onSubmit = async (values: UserInfo, form) => {
-    const userInfo: UserInfo = {
-      email: state.email,
-      password: state.password,
-    };
-    console.log(values);
-    setIsUserValid(verifyUserDetails(userInfo));
+  const onSubmit = async (values: UserInfo) => {
+    setIsUserValid(verifyUserDetails(values));
+    if (!isUserValid) {
+      return { [FORM_ERROR]: "Login details are not valid" };
+    }
   };
 
   return (
     <Form
       onSubmit={onSubmit}
-      validate={(values) => {
-        const errors = {};
-
-        return errors;
-      }}
-      render={({ handleSubmit }) => {
+      render={({ handleSubmit, error, form }) => {
+        console.log(error);
         return (
           <form
             className="form"
@@ -97,41 +98,25 @@ function LoginComponent({ updateLogin }) {
             <div>
               <Field
                 name="email"
-                validate={(values) => {
-                  console.log(values);
-                  let errors = " ";
-                  const emailRegex =
-                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                  if (values?.trim()?.length === 0) errors = "required";
-                  else if (!emailRegex.test(values)) {
-                    errors = "invalidEmail";
-                  }
-                  return errors;
-                }}
+                validate={compositeValidator(required, validEmail)}
               >
                 {({ input, meta }) => {
-                  console.log("meta : ", meta);
-
                   return (
                     <CustomInputComponent
                       id="email"
                       label="email"
-                      placeholder="Email"
+                      placeholder="Enter Email"
                       type="email"
                       variant="standard"
                       {...input}
-                      error={() => {
-                        if (meta.pristine && meta.touched) return true;
-                        else if (meta.touched && meta.error) return true;
-                        else return false;
-                      }}
-                      helperText={() => {
-                        if (meta.pristine && meta.touched)
-                          return "Email is required";
-                        else if (meta.touched && meta.error)
-                          return "Please enter valid email";
-                        else return " ";
-                      }}
+                      error={
+                        meta.touched && meta.error
+                          ? error
+                            ? true
+                            : false
+                          : false
+                      }
+                      helperText={(meta.touched && meta.error) || " "}
                     />
                   );
                 }}
@@ -139,7 +124,13 @@ function LoginComponent({ updateLogin }) {
             </div>
 
             <div>
-              <Field name="password">
+              <Field
+                name="password"
+                validate={compositeValidator(required, minLength(4))}
+                afterSubmit={(value) => {
+                  console.log(value);
+                }}
+              >
                 {({ input, meta }) => {
                   return (
                     <CustomInputComponent
@@ -148,13 +139,11 @@ function LoginComponent({ updateLogin }) {
                       placeholder="Enter Password"
                       variant="standard"
                       {...input}
-                      type="email"
-                      error={meta.touched && meta.error}
-                      helperText={
-                        meta.touched && meta.error
-                          ? meta.error === "minimumLength"
-                          : ""
+                      type="password"
+                      error={
+                        meta.touched && meta.error ? true : error ? true : false
                       }
+                      helperText={(meta.touched && meta.error) || error || " "}
                     />
                   );
                 }}
@@ -162,7 +151,7 @@ function LoginComponent({ updateLogin }) {
             </div>
 
             <div>
-              <button type="submit">Submit</button>
+              <button type="submit">Login</button>
             </div>
           </form>
         );
