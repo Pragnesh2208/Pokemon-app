@@ -7,7 +7,6 @@ import "./PokemonDetails.component.scss";
 function PokemonDetailsComponent() {
   let currentPokemonIndex: number = window.history?.state?.usr?.id;
   currentPokemonIndex = currentPokemonIndex ? currentPokemonIndex : -1;
-  console.log(currentPokemonIndex);
   const [pokemonInfo, updatePokemonInfo] = useState({} as pokemonInfo);
   useEffect(() => {
     getPokemonById(currentPokemonIndex)

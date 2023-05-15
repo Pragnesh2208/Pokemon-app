@@ -11,7 +11,6 @@ import {
   required,
   validEmail,
 } from "../../util/validations";
-
 type Actions = {
   type: string;
   newValue: string;
@@ -78,16 +77,13 @@ function LoginComponent({ updateLogin }) {
 
   const onSubmit = async (values: UserInfo) => {
     setIsUserValid(verifyUserDetails(values));
-    if (!isUserValid) {
-      return { [FORM_ERROR]: "Login details are not valid" };
-    }
+    if (!isUserValid) return { [FORM_ERROR]: "Login cred not valid" };
   };
 
   return (
     <Form
       onSubmit={onSubmit}
-      render={({ handleSubmit, error, form }) => {
-        console.log(error);
+      render={({ handleSubmit, submitError }) => {
         return (
           <form
             className="form"
@@ -109,13 +105,7 @@ function LoginComponent({ updateLogin }) {
                       type="email"
                       variant="standard"
                       {...input}
-                      error={
-                        meta.touched && meta.error
-                          ? error
-                            ? true
-                            : false
-                          : false
-                      }
+                      error={meta.touched && meta.error ? true : false}
                       helperText={(meta.touched && meta.error) || " "}
                     />
                   );
@@ -127,11 +117,9 @@ function LoginComponent({ updateLogin }) {
               <Field
                 name="password"
                 validate={compositeValidator(required, minLength(4))}
-                afterSubmit={(value) => {
-                  console.log(value);
-                }}
               >
                 {({ input, meta }) => {
+                  console.log(meta);
                   return (
                     <CustomInputComponent
                       id="password"
@@ -141,9 +129,16 @@ function LoginComponent({ updateLogin }) {
                       {...input}
                       type="password"
                       error={
-                        meta.touched && meta.error ? true : error ? true : false
+                        (!meta.active && submitError) ||
+                        (meta.touched && meta.error)
+                          ? true
+                          : false
                       }
-                      helperText={(meta.touched && meta.error) || error || " "}
+                      helperText={
+                        !meta.active && submitError
+                          ? "Login cred not valid"
+                          : (meta.touched && meta.error) || " "
+                      }
                     />
                   );
                 }}

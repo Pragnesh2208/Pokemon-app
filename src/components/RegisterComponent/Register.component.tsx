@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import { Field, Form } from "react-final-form";
 import { useNavigate } from "react-router-dom";
-import { storeUserDetails, verifyUserDetails } from "../../APIs/Storage.api";
+import { storeUserDetails } from "../../APIs/Storage.api";
 import { UserInfo } from "../../models/UserInfo.model";
 import CustomInputComponent from "../../stories/components/CustomInput/Input.component";
 import {
@@ -80,16 +80,13 @@ function RegisterComponent() {
   userConfirmPasswordProps.placeholder = "Enter Confirm Password";
   userConfirmPasswordProps.label = "Confrim Password";
 
-  const onSubmit = async () => {
+  const onSubmit = async (values) => {
     const userInfo: UserInfo = {
-      email: state.email,
-      password: state.password,
+      email: values.email,
+      password: values.password,
     };
-    const isUserValid = verifyUserDetails(userInfo);
-    if (!isUserValid) {
-      // navigate("/pokemon-listing");
-      storeUserDetails(userInfo);
-    }
+    // navigate("/pokemon-listing");
+    storeUserDetails(userInfo);
     naviagate("/login");
   };
 
@@ -98,7 +95,6 @@ function RegisterComponent() {
       onSubmit={onSubmit}
       validate={(values) => {
         const error = {};
-        console.log(values);
         if (values.password !== values.confirmPassword) {
           error.confirmPassword = "Confirm password and password are different";
         }
@@ -134,7 +130,6 @@ function RegisterComponent() {
               validate={compositeValidator(required, minLength(4))}
             >
               {({ input, meta }) => {
-                console.log(meta);
                 return (
                   <CustomInputComponent
                     id="password"
