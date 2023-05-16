@@ -8,6 +8,7 @@ function CustomSearchComponent({ ...props }) {
   return (
     <>
       <CustomInputComponentStyled
+        disableUnderline={true}
         {...props.searchInputProps}
         onChange={(event) => {
           const value = event.target.value.trim();

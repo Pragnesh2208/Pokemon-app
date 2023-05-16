@@ -1,6 +1,8 @@
 import { MenuItem, Select, styled } from "@mui/material";
-
-export const CustomSelectStyled = styled(Select)`
+type SelectComponentProps = {
+  background: string;
+};
+export const CustomSelectStyled = styled(Select)<SelectComponentProps>`
   &.MuiInputBase-root {
     padding: 20px;
   }
@@ -13,7 +15,10 @@ export const CustomSelectStyled = styled(Select)`
   }
 
   .MuiSelect-select {
-    background: #efefef;
+    background: ${({ background }) => {
+      const backgroundColor: string = background;
+      return backgroundColor;
+    }};
     padding: 5px 22px 5px 5px !important;
     width: 100%;
     border-radius: 0;

@@ -13,6 +13,7 @@ function CustomSelectComponent({ ...props }) {
 
   return (
     <CustomSelectStyled
+      background={props.background}
       labelId="demo-simple-select-label"
       id="demo-simple-select"
       value={age}

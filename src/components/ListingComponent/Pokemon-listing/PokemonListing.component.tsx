@@ -78,6 +78,7 @@ function PokemonListingComponent() {
               });
             });
           }}
+          background="#efefef"
           defaultValue={paginationValue}
           menuInfo={menuInfo}
         ></CustomSelectComponent>
