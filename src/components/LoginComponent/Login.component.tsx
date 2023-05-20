@@ -11,6 +11,7 @@ import {
   required,
   validEmail,
 } from "../../util/validations";
+import { Link } from "react-router-dom";
 type Actions = {
   type: string;
   newValue: string;
@@ -81,7 +82,8 @@ function LoginComponent({ updateLogin }) {
   };
 
   return (
-    <Form
+    <>
+       <Form
       onSubmit={onSubmit}
       render={({ handleSubmit, submitError }) => {
         return (
@@ -119,7 +121,6 @@ function LoginComponent({ updateLogin }) {
                 validate={compositeValidator(required, minLength(4))}
               >
                 {({ input, meta }) => {
-                  console.log(meta);
                   return (
                     <CustomInputComponent
                       id="password"
@@ -147,11 +148,18 @@ function LoginComponent({ updateLogin }) {
 
             <div>
               <button type="submit">Login</button>
+              <Link to="/register" > 
+              <p style={{margin : '20px' , fontSize : '20px'}}>Want to register Click on SignUp</p>
+    <button type="button">SignUp</button>
+    </Link>
             </div>
           </form>
         );
       }}
     />
+    
+    </>
+ 
   );
 }
 export default LoginComponent;

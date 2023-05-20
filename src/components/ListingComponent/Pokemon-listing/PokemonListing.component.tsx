@@ -23,7 +23,7 @@ function PokemonListingComponent() {
     getPokemonLists(paginationValue).then((res) => {
       updatePokemonLists(res as never[]);
     });
-  }, []);
+  }, [paginationValue ]);
 
   const searchInputProps = {
     name: "Search",
@@ -59,18 +59,16 @@ function PokemonListingComponent() {
           updateField={(newValue: string) => {
             newValue = newValue.trim();
             updateSearchValue(newValue);
+            getSearchPokemonLists(newValue).then((res) => {
+              updateSearchPokemonLists(res);
+            });
 
-            if (newValue.length > 0) {
-              getSearchPokemonLists(newValue).then((res) => {
-                updateSearchPokemonLists(res);
-              });
-            } else {
-              updateSearchPokemonLists([]);
-            }
           }}
         />
         <CustomSelectComponent
           updateValue={(newValue: number) => {
+            updatePaginationValue(newValue
+              )
             getPokemonLists(newValue).then((res) => {
               updatePokemonLists(res as never[]);
               getSearchPokemonLists(SearchValue).then((res) => {

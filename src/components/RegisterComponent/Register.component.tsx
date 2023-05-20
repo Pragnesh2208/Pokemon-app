@@ -94,7 +94,7 @@ function RegisterComponent() {
     <Form
       onSubmit={onSubmit}
       validate={(values) => {
-        const error = {};
+        const error : any= {};
         if (values.password !== values.confirmPassword) {
           error.confirmPassword = "Confirm password and password are different";
         }

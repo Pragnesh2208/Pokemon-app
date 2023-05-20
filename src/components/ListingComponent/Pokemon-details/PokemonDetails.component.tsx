@@ -13,7 +13,7 @@ function PokemonDetailsComponent() {
       .then((res) => {
         updatePokemonInfo(res as pokemonInfo);
       })
-      .catch((err) => {});
+      .catch(() => {});
   }, [currentPokemonIndex]);
 
   return (
