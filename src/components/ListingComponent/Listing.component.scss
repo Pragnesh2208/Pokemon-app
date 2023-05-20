@@ -1,0 +1,44 @@
+@import '../../styles/abstract/abstract.scss';
+
+.pokemon-list {
+    &__search {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        gap: 5px;
+    }
+
+    &__header {
+        background-color: $primary-color;
+        color: $white-color;
+        text-align: left;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h1 {
+            font-size: 30px;
+        }
+        button{
+            background-color:#f0f8ff;
+            padding:1rem;border-radius:2rem;
+            font-size:2rem;
+        }
+    }
+
+    &__cards {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    &__card {
+        max-width: 33%;
+        flex-basis: 33%;
+        box-shadow: rgba($black-color, 0.05) 0px 0px 20px, rgba($black-color, 0.08) 0px 0px 40px;
+        border-radius: 5px;
+        padding: 20px;
+    }
+}

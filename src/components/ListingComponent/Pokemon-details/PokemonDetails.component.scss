@@ -1,0 +1,47 @@
+@import "../../../styles/abstract/abstract.scss";
+
+.details {
+    position: relative;
+
+    &__header {
+        text-align: left;
+
+        h1 {
+            margin-block: 21.44px;
+            font-size: 32px;
+        }
+
+        img {
+            display: block;
+            height: 100px;
+        }
+
+        button {
+            text-transform: capitalize;
+            background-color: $primary-color;
+            border: none;
+            border-radius: 0px 5px 5px 0;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            padding: 10px 15px;
+            width: 171px;
+            font-family: Roboto, sans-serif;
+            margin-top: 15px;
+        }
+    }
+
+    &__content {
+        text-align: center;
+        font-size: 16px;
+
+        p {
+            padding: 10px;
+        }
+
+        ol {
+            list-style-position: inside;
+        }
+    }
+}
